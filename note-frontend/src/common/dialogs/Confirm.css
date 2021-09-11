@@ -1,0 +1,18 @@
+.overlay {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.overlay-hidden {
+    display: none;
+}
+
+.confirm-dialog {
+    margin: 20vh auto;
+    width: 20rem;
+    background-color: white;
+}

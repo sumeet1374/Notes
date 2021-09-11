@@ -1,0 +1,18 @@
+.card {
+    display: block;
+    border: 1px solid rgb(39, 8, 80);
+    ;
+}
+
+.cardTitle {
+    display: block;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    background-color: rgb(39, 8, 80);
+    ;
+}
+
+.cardContent {
+    min-height: 10rem;
+}

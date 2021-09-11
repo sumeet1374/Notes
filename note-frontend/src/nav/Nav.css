@@ -1,0 +1,174 @@
+/*Logo */
+
+.logo {
+    margin: 15px;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.logoText {
+    display: inline-block;
+    margin: 10px;
+}
+
+.logoImage {
+    display: inline-block;
+}
+
+
+/*  Top Nav Bar Main*/
+
+.navbar {
+    background-color: rgb(39, 8, 80);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+
+/* Navbar links */
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+}
+
+.navbar a:hover {
+    color: wheat;
+}
+
+.navbar a:visited {
+    color: white;
+}
+
+.nav-list-container {
+    display: flex;
+    justify-content: right;
+}
+
+.nav-list {
+    list-style-type: none;
+}
+
+.list-item {
+    display: inline-block;
+    padding: 1.25rem 0.625rem;
+}
+
+
+/*  class that holds submenu*/
+
+.submenu-list-item {
+    position: relative;
+}
+
+
+/*  Sub menu button*/
+
+.submenu-button {
+    display: inline-block;
+}
+
+
+/*  Sub menu list top class*/
+
+.submenu-list {
+    position: absolute;
+    display: none;
+    top: 3rem;
+    min-width: 6rem;
+    left: -2rem;
+    list-style-type: none;
+    background-color: rgb(68, 104, 170);
+    z-index: 5;
+}
+
+
+/*  Sub menu item*/
+
+.submenu-child-list-item {
+    display: block;
+    padding: 1.0rem 0.625rem;
+    border-bottom: 1px solid white;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+
+/* Active class for the list*/
+
+.active {
+    display: block;
+}
+
+
+/* Toggle Button menu */
+
+.menu-line {
+    width: 20px;
+    height: 3px;
+    background-color: white;
+    margin-bottom: 4px;
+}
+
+.menu {
+    display: none;
+}
+
+@media all and (max-width:400px) {
+    .navbar {
+        flex-direction: column;
+        width: 100%;
+    }
+    .nav-list-container {
+        flex-direction: column;
+        width: 100%;
+    }
+    .menu {
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+    }
+    .logo {
+        margin: 15px;
+        width: 100%;
+    }
+    .nav-list {
+        list-style-type: none;
+        width: 100%;
+        text-align: center;
+        display: none;
+    }
+    .nav-list-show {
+        display: block;
+    }
+    .list-item {
+        display: block;
+        padding: 15px;
+        border-bottom: 1px solid white;
+    }
+    .submenu-list-item {
+        position: static;
+    }
+    /*  Sub menu button*/
+    .submenu-button {
+        display: block;
+    }
+    /*  Sub menu list top class*/
+    .submenu-list {
+        position: static;
+        display: none;
+        list-style-type: none;
+        background-color: rgb(68, 104, 170);
+    }
+    .active {
+        display: block;
+    }
+}

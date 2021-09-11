@@ -1,0 +1,110 @@
+.formStandard {
+    margin: 4rem auto;
+    width: 70%;
+}
+
+.form-main {
+    margin: 2rem auto;
+    width: 90%;
+    position: relative;
+}
+
+.form-field-group {
+    margin: 1rem auto;
+    width: 100%;
+}
+
+.form-field {
+    border: 1px solid rgb(39, 8, 80);
+    display: block;
+    width: 100%;
+    height: 2rem;
+    border-radius: 0.25rem;
+}
+
+.form-field-checkbox {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.form-field-error {
+    border: 2px solid red;
+    background-color: rgb(233, 213, 213);
+    display: block;
+}
+
+.form-field-error-message {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: red;
+}
+
+.button {
+    border: none;
+    padding: 0.8rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.button:disabled {
+    background-color: rgb(100, 101, 104);
+}
+
+.primary {
+    background-color: rgb(68, 104, 170);
+    color: white;
+}
+
+.primary:hover {
+    background-color: rgb(68, 104, 170);
+    color: wheat;
+}
+
+.secondary {
+    background-color: rgb(121, 116, 116);
+    color: white;
+}
+
+.secondary:hover {
+    background-color: rgb(121, 116, 116);
+    color: wheat;
+}
+
+.form-label {
+    display: block;
+    margin: 0.7rem auto;
+    font-size: 0.9rem
+}
+
+.form-label-required {
+    display: block;
+    margin: 0.7rem auto;
+    font-size: 0.9rem
+}
+
+.form-label-required::after {
+    color: red;
+    content: "*";
+}
+
+.hide {
+    display: none;
+}
+
+@media all and (max-width:400px) {
+    .formStandard {
+        margin: 4rem auto;
+        width: 90%;
+    }
+}
+
+@media all and (max-width:700px) {
+    .formStandard {
+        margin: 4rem auto;
+        width: 80%;
+    }
+}
