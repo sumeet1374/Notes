@@ -23,10 +23,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release ./NotesService/NotetsService.sln
+        run: dotnet build --configuration Release ./NotesService/NotesService.sln
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./NotesService/NotetsService.sln
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./NotesService/NotesService.sln
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
