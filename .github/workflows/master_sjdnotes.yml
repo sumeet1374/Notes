@@ -21,12 +21,23 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
+      
+      - name: Set up Node Js
+        uses: actions/setup-node@v1
+        with:
+          node-version:${{ matrix.node-version }}
+          
+      - name: Install Node Dependencies
+        run: npm install ./note-frontend
 
       - name: Build with dotnet
         run: dotnet build --configuration Release ./NotesService/NotesService.sln
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./NotesService/NotesService.sln
+      
+      - name: build react app
+        run:  npm --prefix ./note-frontend run build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
