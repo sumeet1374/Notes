@@ -7,6 +7,7 @@ import NoteList from '../notes/NoteList';
 import UserList from '../account/UserList';
 import LogOut from '../account/LogOut';
 import RegisterUser from '../account/RegisterUser';
+import Login from '../auth/Login';
 
 
 
@@ -60,16 +61,16 @@ const Nav = (props) => {
                 </div>
                 <ul className={navListClasses.listClasses} >
                     <li className="list-item">
-                        <Link to="/">My Notes</Link>
+                       { props.isAuthenticated ? <Link to="/">My Notes</Link> :null }
                     </li>
                     <li className="list-item">
-                        <Link to="/users">Users</Link>
+                      { props.isAuthenticated ? <Link to="/users">Users</Link> :null }
                     </li>
                     <li className="list-item submenu-list-item">
                         <a href="#" className="submenu-button" onClick={subMenuButtonClick}> Profile &#9660;</a>
                         <ul className={userSubMenuClasses.listClasses} >
                             <li className="submenu-child-list-item" >
-                                <Link to="/logout" onClick={subMenuLinkClick} > Log Out </Link>
+                            { props.isAuthenticated ? <Link to="/logout" onClick={subMenuLinkClick} > Log Out </Link> :null }
                             </li>
                             <li className="submenu-child-list-item" >
                                 <Link to="/register" onClick={subMenuLinkClick} >Register User </Link>
@@ -85,7 +86,7 @@ const Nav = (props) => {
             </nav>
 
             <Switch>
-                <Route exact path="/" component={NoteList}  />
+            { props.isAuthenticated ?  <Route exact path="/" component={NoteList} /> : <Route  exact path="/" component={Login}></Route> }
                 <Route exact path="/users" component={UserList}  />
                 <Route exact path="/logout" component={LogOut}/>
                 <Route exact path="/register" component={RegisterUser}/>

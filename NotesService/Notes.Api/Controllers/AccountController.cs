@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,13 @@ namespace Notes.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        [HttpGet]
+        [Route("/")]
+        [Authorize]
+        public ActionResult GetAllUsers()
+        {
+            return Ok("Welcome");
+        }
+        
     }
 }
