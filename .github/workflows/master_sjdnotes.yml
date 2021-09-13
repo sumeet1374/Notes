@@ -23,12 +23,11 @@ jobs:
       steps:
         - uses: actions/checkout@v2
 
-        - name: Update Domain
-          uses: jwsi/secret-parser@v1
-          with:
-            filename: ./note-frontend/.env
-            secret-name: DOMAIN
-            secret-value: ${{ secrets.DOMAIN }}
+        - name: Create env file
+          run: |
+            ${{secret.ENV_FILE}} > .env
+            cat .env
+         
 
         - name: Update Client Id
           uses: jwsi/secret-parser@v1
