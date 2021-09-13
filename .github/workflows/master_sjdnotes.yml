@@ -72,9 +72,10 @@ jobs:
           uses: actions/download-artifact@v2
           with:
             name: react-app
+            path: /build
 
         - name: Copy react app to dotnet published folder
-          run: copy ../react-app/*  ${{env.DOTNET_ROOT}}/myapp/app  -recurse -force
+          run: copy ../build/*  ${{env.DOTNET_ROOT}}/myapp/app  -recurse -force
 
 
         - name: Upload app for deplpoyment job
