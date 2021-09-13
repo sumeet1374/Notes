@@ -23,6 +23,20 @@ jobs:
       steps:
         - uses: actions/checkout@v2
 
+        - name: Update Domain
+          uses: jwsi/secret-parser@v1
+          with:
+            filename: ./note-frontend/.env
+            secret-name: DOMAIN
+            secret-value: ${{ secrets.DOMAIN }}
+
+        - name: Update Client Id
+          uses: jwsi/secret-parser@v1
+          with:
+            filename: ./note-frontend/.env
+            secret-name: CLIENT_ID
+            secret-value: ${{ secrets.CLIENT_ID }}
+
         - name: Set up Node Js
           uses: actions/setup-node@v2
           with:
