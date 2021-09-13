@@ -35,6 +35,8 @@ jobs:
 
         - name: build react app
           run: npm run build  --if-present
+          env:
+            CI: false
         
         - name: Upload Artifact 
           uses: actions/upload-artifact@v2
