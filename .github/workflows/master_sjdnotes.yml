@@ -24,18 +24,12 @@ jobs:
         - uses: actions/checkout@v2
 
         - name: Create env file
+          env:
+            ENV_FILE: ${{secret.ENV_FILE}}
           run: |
-            ${{secret.ENV_FILE}} > .env
+            ${{ENV_FILE}} > .env
             cat .env
-         
-
-        - name: Update Client Id
-          uses: jwsi/secret-parser@v1
-          with:
-            filename: ./note-frontend/.env
-            secret-name: CLIENT_ID
-            secret-value: ${{ secrets.CLIENT_ID }}
-
+      
         - name: Set up Node Js
           uses: actions/setup-node@v2
           with:
