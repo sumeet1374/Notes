@@ -48,7 +48,7 @@ jobs:
         - name: Setup .Net core
           uses: action/setup=dotnet@v1
           with:
-            dotnet-version:'5.0.x'
+            dotnet-version: '5.0.x'
 
         - name: Build with dotnet
           run:  dotnet build --configuration Release 
@@ -62,7 +62,7 @@ jobs:
             name: react-app
 
         - name: Copy react app to dotnet published folder
-          run: copy ./build/*    ${{env.DOTNET_ROOT}}/myapp/app  -recurse -force
+          run: copy ./build/*  ${{env.DOTNET_ROOT}}/myapp/app  -recurse -force
 
 
         - name: Upload app for deplpoyment job
@@ -80,17 +80,17 @@ jobs:
         name: 'Production'
         url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app
+      steps:
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v2
+          with:
+            name: .net-app
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'sjdnotes'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_30EE1D75117946FDA003DBC2EFCE62B2 }}
-          package: .
+        - name: Deploy to Azure Web App
+          id: deploy-to-webapp
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: 'sjdnotes'
+            slot-name: 'Production'
+            publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_30EE1D75117946FDA003DBC2EFCE62B2 }}
+            package: .
