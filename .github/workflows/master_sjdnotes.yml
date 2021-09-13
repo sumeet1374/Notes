@@ -10,58 +10,75 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
+    buildreactapp:
+      runs-on:  windows-latest
+      working-directory:  note-frontend
+      strategy:
+        matrix:
+          node-version: [14.x]
 
-    strategy:
-      matrix:
-        node-version: [14.x]
+      steps:
+        - name: Set up Node Js
+          uses: actions/setup-node@v2
+          with:
+            node-version: ${{ matrix.node-version }}
 
-    steps:
-      - uses: actions/checkout@v2
+        - name: Install Dependencies
+          run: npm install
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-          include-prerelease: true
+        - name: build react app
+          run: npm run build  --if-present
+        
+        - name: Upload Artifact 
+          uses: upload-artifact@v2
+          with:
+            name: react-app
+            path: build
+
+
+    builddotnetapp:
+      runs-on: windows-latest
+      working-directoy: NotesService
+      needs: buildreactapp
+     
+
+      steps:
+        - uses: action/checkout@v2
+
+        - name: Setup .Net core
+          uses: action/setup=dotnet@v1
+          with:
+            dotnet-version:'5.0.x'
+
+        - name: Build with dotnet
+          run:  dotnet build --configuration Release 
+
+        - name: Dot net publish
+          run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+        - name: Download react artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: react-app
+
+        - name: Copy react app to dotnet published folder
+          run: copy ./build/*    ${{env.DOTNET_ROOT}}/myapp/app  -recurse -force
+
+
+        - name: Upload app for deplpoyment job
+          uses: actions/upload-artifact@v2
+          with:
+            name: .net-app
+            path: ${{env.DOTNET_ROOT}}/myapp
       
       
-      - name: Build with dotnet
-        run: dotnet build --configuration Release ./NotesService/NotesService.sln
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./NotesService/NotesService.sln
-      
- 
-
-      - name: Set up Node Js  ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          
-      - name: Install Node Dependencies
-        run: | 
-          cd note-frontend
-          npm install 
-
-      - name: build react app
-        run: |
-          cd note-frontend
-          npm --prefix ./note-frontend run build
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    deploy:
+      runs-on: windows-latest
+      needs: builddotnetapp
+      environment:
+        name: 'Production'
+        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
       - name: Download artifact from build job
