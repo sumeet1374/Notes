@@ -27,7 +27,7 @@ jobs:
           env:
             ENV_FILE: ${{secrets.ENV_FILE}}
           run: |
-            ${{ENV_FILE}} > .env
+           "$env:ENV_FILE" > .env
             cat .env
       
         - name: Set up Node Js
