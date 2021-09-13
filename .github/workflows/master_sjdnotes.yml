@@ -25,7 +25,7 @@ jobs:
       - name: Set up Node Js
         uses: actions/setup-node@v1
         with:
-          node-version:'14.x'
+          node-version:[14.x]
           
       - name: Install Node Dependencies
         run: npm install ./note-frontend
