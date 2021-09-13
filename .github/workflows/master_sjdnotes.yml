@@ -12,7 +12,10 @@ on:
 jobs:
     buildreactapp:
       runs-on:  windows-latest
-      working-directory:  note-frontend
+      defaults:
+        run:
+          working-directory:  note-frontend
+          shell: pwsh
       strategy:
         matrix:
           node-version: [14.x]
@@ -38,7 +41,10 @@ jobs:
 
     builddotnetapp:
       runs-on: windows-latest
-      working-directoy: NotesService
+      defaults:
+        run:
+          working-directory: NotesService
+          shell: pwsh
       needs: buildreactapp
      
 
