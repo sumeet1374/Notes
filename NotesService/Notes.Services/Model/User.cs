@@ -1,7 +1,13 @@
-﻿namespace Notes.Db.Model
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Notes.Services.Model
 {
     /// <summary>
-    ///  User entity
+    ///  DTO class for user
     /// </summary>
     public class User
     {
@@ -11,6 +17,7 @@
         public string Email { get; set; }
         // Mapped User Id from IDP (Identity Provider)
         public string ExternalUserId { get; set; }
+        public string Password { get; set; }
         public bool IsAdmin { get; set; }
         public bool Active { get; set; }
     }

@@ -82,7 +82,11 @@ jobs:
             path: ./build
 
         - name: Copy react app to dotnet published folder
-          run: copy ../build/*  ${{env.DOTNET_ROOT}}/myapp/app  -recurse -force
+          run: | 
+            copy ../build/*  ${{env.DOTNET_ROOT}}/myapp/app/build/
+            copy ../build/static/css/*  ${{env.DOTNET_ROOT}}/myapp/app/build/css
+            copy ../build/static/js/*  ${{env.DOTNET_ROOT}}/myapp/app/build/js
+            copy ../build/static/media/*  ${{env.DOTNET_ROOT}}/myapp/app/build/media
 
 
         - name: Upload app for deplpoyment job

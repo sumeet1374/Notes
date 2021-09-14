@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Notes.Db.Model
+﻿namespace Notes.Db.Model
 {
+    /// <summary>
+    ///  Notes Entity
+    /// </summary>
     public class NoteInfo
     {
         public int Id { get; set; }
