@@ -83,6 +83,11 @@ jobs:
 
         - name: Copy react app to dotnet published folder
           run:  |
+            New-Item -Path "${{env.DOTNET_ROOT}}/myapp" -Name "app" -ItemType "directoty" -Force 
+            New-Item -Path "${{env.DOTNET_ROOT}}/myapp/app" -Name "static" -ItemType "directoty" -Force 
+            New-Item -Path "${{env.DOTNET_ROOT}}/myapp/app/static" -Name "css" -ItemType "directoty" -Force 
+            New-Item -Path "${{env.DOTNET_ROOT}}/myapp/app/static" -Name "js" -ItemType "directoty" -Force 
+            New-Item -Path "${{env.DOTNET_ROOT}}/myapp/app/static" -Name "media" -ItemType "directoty" -Force 
             copy -Path "../build/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app" -Force
             copy -Path "../build/static/css/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/css" -Force -Recurse
             copy -Path "../build/static/js/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/js" -Force -Recurse
