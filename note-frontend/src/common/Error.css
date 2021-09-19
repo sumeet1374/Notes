@@ -1,0 +1,20 @@
+.errorBox {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-direction: column;
+}
+
+.errorHeader {
+    font-size: 2rem;
+    color: red;
+    align-items: stretch;
+    text-align: center;
+}
+
+.errorDetail {
+    font-size: 0.7rem;
+    color: red;
+    align-items: stretch;
+    text-align: center;
+}

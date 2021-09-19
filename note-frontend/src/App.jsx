@@ -1,20 +1,45 @@
 import './App.css';
 import Nav from './nav/Nav';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
+import { getData } from './common/ajax';
+
 
 
 
 function App(props) {
   
   const { isLoading, error,isAuthenticated ,loginWithRedirect } = useAuth0();
+  const [ profile,setProfile] = useState(null);
 
-  // useEffect(()=> {
-  //   loginWithRedirect();
-  // },[]);
+  const { getAccessTokenSilently } = useAuth0();
+
+  useEffect(()=> {
+
+    const getProfile = async ()=> {
+      try{
+        const prof = await getData("/users/extId",getAccessTokenSilently);
+        console.log(prof);
+        setProfile(prof);
+        console.log(profile);
+
+     }
+     catch(e){
+       console.log(e)
+     // history.push('/error');
+     }
+    }
+
+    if(isAuthenticated && !profile){
+      getProfile();
+      console.log(profile);
+    }
+
+  
+  },[isAuthenticated,profile]);
   return (
     <div >
-      <Nav isAuthenticated={isAuthenticated} domain={props.domain}/>
+      <Nav isAuthenticated={isAuthenticated} domain={props.domain} profile={profile}/>
     </div>
 
 

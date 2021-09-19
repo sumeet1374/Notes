@@ -30,6 +30,15 @@ namespace Notes.Api.Controllers
             var user =  await service.GetUser(id);
             return user;
         }
+        [HttpGet]
+        [Route("/users/extId")]
+        [Authorize(policy: AuthPolicies.ADMIN)]
+        public async Task<User> GetAuthenticatedUserByExternalUd()
+        {
+            var userId = User.Identity.Name;
+            var user = await service.GetUserByExternalId(userId);
+            return user;
+        }
 
         [HttpPost]
         [Route("/users")]
@@ -40,6 +49,8 @@ namespace Notes.Api.Controllers
             return Ok();
           
         }
+
+       
 
         [HttpGet]
         [Route("/users")]
