@@ -5,7 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 
-function App() {
+function App(props) {
   
   const { isLoading, error,isAuthenticated ,loginWithRedirect } = useAuth0();
 
@@ -14,7 +14,7 @@ function App() {
   // },[]);
   return (
     <div >
-      <Nav isAuthenticated={isAuthenticated} />
+      <Nav isAuthenticated={isAuthenticated} domain={props.domain}/>
     </div>
 
 

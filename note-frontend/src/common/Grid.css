@@ -1,0 +1,25 @@
+.grid {
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.grid table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+.grid th {
+    background-color: rgb(68, 104, 170);
+    color: white;
+}
+
+.grid table {
+    width: 100%;
+}
+
+.grid tr:nth-child(even) {
+    background-color: #ecc7a9;
+}

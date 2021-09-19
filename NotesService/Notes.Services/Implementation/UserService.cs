@@ -4,6 +4,7 @@ using Notes.Services.Interfaces;
 using Notes.Services.Model;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Notes.Services.Implementation
@@ -35,7 +36,38 @@ namespace Notes.Services.Implementation
             dbUser.LastName = user.LastName;
             dbUser.IsAdmin = user.IsAdmin;
             dbUser.Active = true;
+          
             return dbUser;
+        }
+
+        /// <summary>
+        ///  Validate
+        /// </summary>
+        /// <param name="user"></param>
+        private void ValidateUserCreationInput(User user)
+        {
+            string emailRegx = @"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$";
+            Regex re = new Regex(emailRegx);
+
+            if (string.IsNullOrEmpty(user.Email))
+                throw new ValidationException(string.Format(NotesServiceMessages.REQUIRED,nameof(user.Email)));
+
+            if (!re.IsMatch(user.Email))
+                throw new ValidationException(string.Format(NotesServiceMessages.INVALID, nameof(user.Email)));
+
+            if(string.IsNullOrEmpty(user.Password))
+                throw new ValidationException(string.Format(NotesServiceMessages.REQUIRED, nameof(user.Password)));
+
+            if(user.Password.Length < 8)
+                throw new ValidationException(string.Format(NotesServiceMessages.MIN_LENGTH, nameof(user.Password),8));
+
+            if (string.IsNullOrEmpty(user.ConfirmPassword))
+                throw new ValidationException(string.Format(NotesServiceMessages.REQUIRED, nameof(user.ConfirmPassword)));
+            
+      
+
+            if (user.Password != user.ConfirmPassword)
+                throw new ValidationException(string.Format(NotesServiceMessages.MATCH, nameof(user.Password), nameof(user.ConfirmPassword)));
         }
 
         /// <summary>
@@ -46,45 +78,64 @@ namespace Notes.Services.Implementation
 
         public async Task<int> CreateUser(User user)
         {
+            ValidationException except = null;
+            IdpResponse idpResponse = null;
+            ValidateUserCreationInput(user); // Basic validation
             try
             {
                 // Create user in IDP
-                await idpService.CreateUser(user);
-                // Create user in local db
-                using (var context = new NotesDbContext(provider))
-                {
-                    userDao.Context = context;
-                    //Check if Email Exists
-                    var existingUser = await userDao.QueryUser((x) => string.Equals(x.Email, user.Email, StringComparison.OrdinalIgnoreCase));
-                    if (existingUser != null)
-                    {
-                        // Update User
-                        var userToUpdate = CreateOrUpdateDbUser(user, existingUser);
-                        context.SaveChanges();
-                        return existingUser.Id;
+                idpResponse =  await idpService.CreateUser(user);
 
-                    }
-                    else
-                    {
-                        var result = await userDao.CreateUser(CreateOrUpdateDbUser(user));
-                        return result;
-                    }
-                }
 
             }
             catch (IdpWebException webException)
             {
-                if (webException.StatusCode == System.Net.HttpStatusCode.Conflict)
-                {
-                    throw new ValidationException($"{user.Email} already registered.");
-                }
-
                 throw;
+
+             
+            }
+            catch(ValidationException ex)
+            {
+                except = ex;
+                idpResponse = ex.MetaData as IdpResponse;
             }
             catch (Exception)
             {
                 throw;
             }
+
+            if (idpResponse == null)
+                throw new Exception("Uable to save record in IDP");
+              
+            int result;
+
+            // Create/Sync user in local db
+            using (var context = new NotesDbContext(provider))
+            {
+                userDao.Context = context;
+                //Check if Email Exists
+                var existingUser = await userDao.Query((x) => x.Email.ToLower() == user.Email);
+                if (existingUser != null)
+                {
+                    // Update User
+                    var userToUpdate = CreateOrUpdateDbUser(user, existingUser);
+                    userToUpdate.ExternalUserId = idpResponse.user_id;
+                    context.SaveChanges();
+                    result = existingUser.Id;
+
+                }
+                else
+                {
+                    var userToCreate = CreateOrUpdateDbUser(user);
+                    userToCreate.ExternalUserId = idpResponse.user_id;
+                    result = await userDao.Create(CreateOrUpdateDbUser(user));
+                }
+            }
+
+            if (except != null)
+                throw except;
+
+            return result;
         }
         /// <summary>
         /// 
@@ -98,14 +149,14 @@ namespace Notes.Services.Implementation
             {
                 userDao.Context = context;
 
-                var result = await userDao.GetAllUsers(pageNumber, pageSize);
+                var result = await userDao.GetAll(pageNumber, pageSize);
 
                 var pagedResult = new PagedModel<User>();
                 pagedResult.PageNumber = result.PageNumber;
                 pagedResult.PageSize = result.PageSize;
                 pagedResult.TotalPages = result.TotalPages;
                 pagedResult.TotalRecords = result.TotalRecords;
-                pagedResult.Result = result.Result.Select((data) => new User() { Id = data.Id, FirstName = data.FirstName, LastName = data.LastName, Email = data.Email, ExternalUserId = data.ExternalUserId, IsAdmin = data.IsAdmin, Active = data.Active }).ToList();
+                pagedResult.Result = result.Result.Select((data) => new User(data)).ToList();
                 return pagedResult;
             }
         }
@@ -115,19 +166,43 @@ namespace Notes.Services.Implementation
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
-            throw new NotImplementedException();
+            using (var context = new NotesDbContext(provider))
+            {
+                userDao.Context = context;
+                var user = await userDao.Query(x => x.Active && x.Id == id);
+                if (user != null)
+                    return new User(user);
+            }
+
+            return null;
         }
 
-        public Task<User> GetUserByExternalId(string externalId)
+        public async Task<User> GetUserByExternalId(string externalId)
         {
-            throw new NotImplementedException();
+            using (var context = new NotesDbContext(provider))
+            {
+                userDao.Context = context;
+                var user = await userDao.Query(x => x.Active && x.ExternalUserId == externalId);
+                if (user != null)
+                    return new User(user);
+            }
+
+            return null;
         }
 
-        public Task<User> GetUserByEmail(string email)
+        public async Task<User> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            using (var context = new NotesDbContext(provider))
+            {
+                userDao.Context = context;
+                var user = await userDao.Query(x => x.Active && x.Email == email);
+                if (user != null)
+                    return new User(user);
+            }
+
+            return null;
         }
     }
 }

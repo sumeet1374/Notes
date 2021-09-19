@@ -37,7 +37,7 @@ namespace Notes.Db.Test
             {
                 var dao = new UserDao();
                 dao.Context = context;
-                id = await dao.CreateUser(CreateLocalUser("First"));
+                id = await dao.Create(CreateLocalUser("First"));
             }
             Assert.IsTrue(id > 0);
             User user;
@@ -45,7 +45,7 @@ namespace Notes.Db.Test
             {
                 var dao = new UserDao();
                 dao.Context = context;
-                user = await dao.GetUser(id);
+                user = await dao.Get(id);
             }
             Assert.IsNotNull(user);
             Assert.AreEqual("TestFirst", user.FirstName);
@@ -75,7 +75,7 @@ namespace Notes.Db.Test
                 dao.Context = context;
                 for (int i = 0; i < 16; i++)
                 {
-                    id = await dao.CreateUser(CreateLocalUser((i + 1).ToString()));
+                    id = await dao.Create(CreateLocalUser((i + 1).ToString()));
                 }
 
             }
@@ -85,7 +85,7 @@ namespace Notes.Db.Test
 
                 var dao = new UserDao();
                 dao.Context = context;
-                pagedResult = await dao.GetAllUsers(2, 10);
+                pagedResult = await dao.GetAll(2, 10);
 
             }
 
@@ -119,7 +119,7 @@ namespace Notes.Db.Test
                 dao.Context = context;
                 for (int i = 0; i < 16; i++)
                 {
-                    id = await dao.CreateUser(CreateLocalUser((i + 1).ToString()));
+                    id = await dao.Create(CreateLocalUser((i + 1).ToString()));
                 }
 
             }
@@ -129,7 +129,7 @@ namespace Notes.Db.Test
 
                 var dao = new UserDao();
                 dao.Context = context;
-                pagedResult = await dao.GetAllUsers(7, 10);
+                pagedResult = await dao.GetAll(7, 10);
 
             }
 
@@ -164,7 +164,7 @@ namespace Notes.Db.Test
                 dao.Context = context;
                 for (int i = 0; i < 16; i++)
                 {
-                    id = await dao.CreateUser(CreateLocalUser((i + 1).ToString()));
+                    id = await dao.Create(CreateLocalUser((i + 1).ToString()));
                 }
 
             }
@@ -174,7 +174,7 @@ namespace Notes.Db.Test
 
                 var dao = new UserDao();
                 dao.Context = context;
-                pagedResult = await dao.GetAllUsers(0, 10);
+                pagedResult = await dao.GetAll(0, 10);
 
             }
 
@@ -202,7 +202,7 @@ namespace Notes.Db.Test
             {
                 var dao = new UserDao();
                 dao.Context = context;
-                var id = await dao.CreateUser(localUser);
+                var id = await dao.Create(localUser);
             }
 
             User userInfo;
@@ -211,7 +211,7 @@ namespace Notes.Db.Test
             {
                 var dao = new UserDao();
                 dao.Context = context;
-                userInfo = await dao.QueryUser(user=>user.Email == userEmail);
+                userInfo = await dao.Query(user=>user.Email == userEmail);
             }
 
             Assert.IsNotNull(userInfo);

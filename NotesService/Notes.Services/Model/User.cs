@@ -18,7 +18,26 @@ namespace Notes.Services.Model
         // Mapped User Id from IDP (Identity Provider)
         public string ExternalUserId { get; set; }
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
         public bool IsAdmin { get; set; }
         public bool Active { get; set; }
+
+        public User()
+        {
+
+        }
+
+        public User(Notes.Db.Model.User user)
+        {
+            Id = user.Id;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Email = user.Email;
+            ExternalUserId = user.ExternalUserId;
+            IsAdmin = user.IsAdmin;
+            Active = user.Active;
+
+
+        }
     }
 }

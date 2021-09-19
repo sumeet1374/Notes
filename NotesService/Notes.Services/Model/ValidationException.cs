@@ -11,5 +11,12 @@ namespace Notes.Services.Model
         {
 
         }
+
+        public object MetaData { get; set; }
+
+        public ValidationException()
+        {
+
+        }
     }
 }

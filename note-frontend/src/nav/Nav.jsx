@@ -87,7 +87,7 @@ const Nav = (props) => {
 
             <Switch>
             { props.isAuthenticated ?  <Route exact path="/" component={NoteList} /> : <Route  exact path="/" component={Login}></Route> }
-                <Route exact path="/users" component={UserList}  />
+                <Route exact path="/users" component={UserList} domain={props.domain} />
                 <Route exact path="/logout" component={LogOut}/>
                 <Route exact path="/register" component={RegisterUser}/>
             </Switch>

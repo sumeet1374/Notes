@@ -22,7 +22,7 @@ namespace Notes.Db.Implementation
             
         }
 
-        public async Task<int> CreateUser(User user)
+        public async Task<int> Create(User user)
         {
 
             Context.Users.Add(user);
@@ -31,7 +31,7 @@ namespace Notes.Db.Implementation
 
         }
 
-        public async Task<PagedModel<User>> GetAllUsers(int pageNumber, int pageSize)
+        public async Task<PagedModel<User>> GetAll(int pageNumber, int pageSize)
         {
 
             if (pageNumber <= 0)
@@ -51,7 +51,7 @@ namespace Notes.Db.Implementation
             return new PagedModel<User>() { Result = result, PageNumber = pageNumber, PageSize = pageSize, TotalPages = totalPages, TotalRecords = count };
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<User> Get(int id)
         {
             var result = await Context.Users.FirstOrDefaultAsync((user) => user.Id == id);
             return result;
@@ -63,7 +63,7 @@ namespace Notes.Db.Implementation
         /// </summary>
         /// <param name="queryCondition"></param>
         /// <returns></returns>
-        public async Task<User> QueryUser(Expression<System.Func<User, bool>> queryCondition)
+        public async Task<User> Query(Expression<System.Func<User, bool>> queryCondition)
         {
             var result = await Context.Users.FirstOrDefaultAsync(queryCondition);
             return result;

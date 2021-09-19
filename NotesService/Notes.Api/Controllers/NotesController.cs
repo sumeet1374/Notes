@@ -11,6 +11,6 @@ namespace Notes.Api.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
-
+        
     }
 }

@@ -11,9 +11,9 @@ namespace Notes.Services.Model
     /// </summary>
     public class IdpServiceConfiguration
     {
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public string IdpServiceBaseUrl { get; set; }
-        public string Audience { get; set; }
+        public string UserServiceClientId { get; set; }
+        public string UserServiceClientSecret { get; set; }
+        public string UserServiceBaseUrl { get; set; }
+        public string UserServiceAudience { get; set; }
     }
 }

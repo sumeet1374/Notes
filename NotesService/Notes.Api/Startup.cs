@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Notes.Api.Auth;
+using Notes.Api.Filters;
+using Notes.Db.Implementation;
+using Notes.Db.Interfaces;
+using Notes.Services.Implementation;
+using Notes.Services.Interfaces;
+using Notes.Services.Model;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Notes.Api
 {
@@ -31,8 +30,16 @@ namespace Notes.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+                                  });
+            });
 
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add(new ExceptionFilter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Notes.Api", Version = "v1" });
@@ -51,6 +58,22 @@ namespace Notes.Api
                     NameClaimType = ClaimTypes.NameIdentifier
                 };
             });
+
+            services.AddAuthorization((options) =>
+            {
+                options.AddPolicy(AuthPolicies.USER, policy => policy.Requirements.Add(new NotesAuthRequirement() { IsAdmin = false }));
+                options.AddPolicy(AuthPolicies.ADMIN, policy => policy.Requirements.Add(new NotesAuthRequirement() { IsAdmin = true }));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, NotesAuthorizationHandler>();
+            services.Configure<IdpServiceConfiguration>(Configuration.GetSection("Auth0"));
+            services.AddSingleton<IDbProvider, SqlLiteDbProvider>((x)=>  new SqlLiteDbProvider(Configuration.GetConnectionString("NotesDbConnection")));
+           
+          
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IIdpService, IdpService>();
+            services.AddSingleton<IUserDao, UserDao>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +82,7 @@ namespace Notes.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Notes.Api v1"));
             }
@@ -66,6 +90,7 @@ namespace Notes.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 

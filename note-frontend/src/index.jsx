@@ -11,8 +11,10 @@ ReactDOM.render(
        domain={process.env.REACT_APP_AUTH0_DOMAIN}
        clientId={process.env.REACT_APP_AUTH0_CLIENTID}
        redirectUri={window.location.origin}
+       audience={process.env.REACT_APP_API_AUDIENCE}
+       scope="open idread:notes"
     >
-    <App />
+    <App domain={process.env.REACT_APP_AUTH0_DOMAIN} />
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root')

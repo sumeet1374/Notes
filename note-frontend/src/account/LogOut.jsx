@@ -1,24 +1,14 @@
 import { useState } from "react";
 import Confirm from "../common/dialogs/Confirm";
 import "../common/Forms.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LogOut = () => {
 
-    const [showConfirm, setShowConfirm] = useState(false);
-
-    const onConfirmAction = () => {
-    
-        setShowConfirm(false);
-       
-    }
-
-    const showDialog = ()=>{
-        setShowConfirm(true);
-    }
+    const { logout } = useAuth0();
+    logout({ returnTo: window.location.origin })
 
     return (<div>
-        <div><button className="button primary" onClick={showDialog}>Show Dialog</button></div>
-        <Confirm visible={showConfirm} onConfirm={onConfirmAction} onCancel={onConfirmAction} backgroundColor="red"  ></Confirm>
-        <div>Logout</div></div>);
+       Logging out ...</div>);
 };
 export default LogOut;

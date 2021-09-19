@@ -12,7 +12,7 @@ namespace Notes.Services.Interfaces
     /// </summary>
     public interface IIdpService
     {
-        public Task CreateUser(User user);
+        public Task<IdpResponse> CreateUser(User user);
      
     }
 }

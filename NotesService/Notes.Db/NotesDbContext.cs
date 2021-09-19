@@ -22,6 +22,14 @@ namespace Notes.Db
         {
             provider.ConfigureDb(optionsBuilder);
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>().ToTable("User");
+            builder.Entity<NoteInfo>().ToTable("NotesInfo");
+
+
+        }
         public NotesDbContext(IDbProvider provider)
         {
             this.provider = provider;

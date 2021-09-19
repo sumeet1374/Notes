@@ -1,4 +1,6 @@
-﻿namespace Notes.Db.Model
+﻿using System;
+
+namespace Notes.Db.Model
 {
     /// <summary>
     ///  Notes Entity
@@ -8,6 +10,7 @@
         public int Id { get; set; }
         public string Note { get; set; }
         public int UserId { get; set; }
+        public DateTime CreatedDate { get; set; }
 
     }
 }
