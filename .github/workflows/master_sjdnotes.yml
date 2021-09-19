@@ -83,10 +83,10 @@ jobs:
 
         - name: Copy react app to dotnet published folder
           run:  |
-            copy -Path "../build/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app" 
-            copy -Path "../build/static/css/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/css" 
-            copy -Path "../build/static/js/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/js" 
-            copy -Path "../build/static/media/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/media" 
+            copy -Path "../build/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app" -Force
+            copy -Path "../build/static/css/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/css" -Force
+            copy -Path "../build/static/js/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/js" -Force
+            copy -Path "../build/static/media/*" -Destination "${{env.DOTNET_ROOT}}/myapp/app/static/media"  -Force
 
         - name: Upload app for deplpoyment job
           uses: actions/upload-artifact@v2
