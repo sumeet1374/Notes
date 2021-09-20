@@ -36,7 +36,6 @@ const UserList = () => {
 
   const onPagerClicked = (event)=> {
 
-    console.log(event.target.name);
     setPageNumber(event.target.name);
    // console.log(event.target.name);
   }
@@ -74,7 +73,7 @@ const UserList = () => {
       <Loader visible={loading} />
       
       <Card title="Users" className="formStandard" >
-        {users && users.result && users.result.length ? <Grid columns={gridMetaData} data={users.result} totalPages={users.totalPages} currentPage={pageNumber} onClick={onPagerClicked}/> : loading?"":"No user found."}
+        {users && users.result && users.result.length ? <Grid columns={gridMetaData} data={users.result} totalPages={users.totalPages} currentPage={pageNumber} onClick={onPagerClicked}/> : loading?"":"No users found."}
       </Card>
     </>
   );

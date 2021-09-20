@@ -20,6 +20,16 @@ namespace Notes.Db.Implementation
             return result;
         }
 
+        public async Task Delete(int id)
+        {
+           var note=  Context.Notes.FirstOrDefault((note) => note.Id == id);
+            if(note != null)
+            {
+                Context.Notes.Remove(note);
+                await Context.SaveChangesAsync();
+            }
+        }
+
         public async Task<NoteInfo> Get(int id)
         {
             var result = await Context.Notes.FirstOrDefaultAsync((note) => note.Id == id);
@@ -34,7 +44,7 @@ namespace Notes.Db.Implementation
             if (pageSize < 0)
                 pageSize = DEFAULT_PAGE_SIZE;
 
-            int count = Context.Users.Count();
+            int count = Context.Notes.Count();
             int totalPages = count / pageSize + (count % pageSize > 0 ? 1 : 0);
 
             if (pageNumber > totalPages)
@@ -49,6 +59,25 @@ namespace Notes.Db.Implementation
         {
             var result = await Context.Notes.FirstOrDefaultAsync(queryCondition);
             return result;
+        }
+
+        public async  Task<PagedModel<NoteInfo>> QueryList(Expression<Func<NoteInfo, bool>> queryCondition, int pageNumber, int pageSize)
+        {
+            if (pageNumber <= 0)
+                pageNumber = 1;
+
+            if (pageSize < 0)
+                pageSize = DEFAULT_PAGE_SIZE;
+
+            int count = Context.Notes.Where(queryCondition).Count();
+            int totalPages = count / pageSize + (count % pageSize > 0 ? 1 : 0);
+
+            if (pageNumber > totalPages)
+                pageNumber = 1;
+
+
+            var result = await Context.Notes.Where(queryCondition).Skip((pageNumber - 1) * pageSize).Take(pageSize).OrderBy(x => x.Id).ToListAsync();
+            return new PagedModel<NoteInfo>() { Result = result, PageNumber = pageNumber, PageSize = pageSize, TotalPages = totalPages, TotalRecords = count };
         }
     }
 }

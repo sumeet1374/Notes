@@ -9,6 +9,7 @@ const Grid = (props) => {
   
 
     const totalSlots = Math.floor(totalPages / pagesToShow) + ((totalPages % pagesToShow) > 0 ? 1 : 0);
+  
 
     const currentSlotNumber = Math.floor(currentPage / pagesToShow) + ((currentPage % pagesToShow) > 0 ? 1 : 0);
 
@@ -53,7 +54,7 @@ const Grid = (props) => {
                     {props.data.map((row) => {
                         return <tr>
                             {
-                                props.columns.map((column) => <td>{column.valueFn(row, column.field)}</td>)
+                                props.columns.map((column) => <td className={column.isActionField?"buttontd":""}>{column.valueFn(row, column.field)}</td>)
 
 
                             }
@@ -67,10 +68,11 @@ const Grid = (props) => {
                 <div>
                     {/* <div className="pager-button" >&lt;&lt;</div> */}
                     <PagerButton isFirsrtButton="true"  currentPage={currentPage} totalPages={totalPages}  onClick={pagerClicked}></PagerButton>
-                    <div className="pager-button">&lt;</div>
+                    <PagerButton isPreviousSlotButton="true"  currentPage={currentPage} totalPages={totalPages} currentSlot={currentSlotNumber} lastSlot={totalSlots} onClick={pagerClicked}></PagerButton>
+                    {/* <div className="pager-button">&lt;</div> */}
                     { pagerArray.map((number,index)=><PagerButton number={number} currentPage={currentPage} totalPages={totalPages} key={index} onClick={pagerClicked}></PagerButton>)}
-                
-                    <div className="pager-button">&gt;</div>
+                    <PagerButton isNextSlotButton="true"  currentPage={currentPage} totalPages={totalPages} currentSlot={currentSlotNumber} lastSlot={totalSlots} onClick={pagerClicked}></PagerButton>
+                    {/* <div className="pager-button">&gt;</div> */}
                     <PagerButton isLastButton="true"  currentPage={currentPage} totalPages={totalPages}  onClick={pagerClicked}></PagerButton>
                 </div>
             </div>

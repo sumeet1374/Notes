@@ -23,6 +23,14 @@ export const minlength = (getValue) => {
         return true;
 
     return false;
+};
+
+export const maxLength = (getValue) => {
+    const [value, entity, parameters] = getValue();
+    if (value.length > parameters.maxLength)
+        return false;
+
+    return true;
 }
 
 

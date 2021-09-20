@@ -1,0 +1,5 @@
+.addButtonPane {
+    display: flex;
+    justify-content: right;
+    margin-top: 1rem;
+}

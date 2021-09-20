@@ -10,6 +10,27 @@ const PagerButton = (props)=> {
              
     }
 
+    if(props.isPreviousSlotButton){
+        if(props.currentSlot > 1){
+            const slot = +props.currentSlot -1;
+            const page = ((slot)*(+props.lastSlot));
+            return <div className="pager-button"><button  name={page} onClick={props.onClick} type="button">&lt;</button></div>; 
+        }
+        else {
+          return  <div className="pager-button">&lt;</div>;
+        }
+    }
+
+    if(props.isNextSlotButton){
+        if(+props.currentSlot < +props.lastSlot){
+            const page = ((+props.currentSlot)*(+props.lastSlot)) + 1;
+            return <div className="pager-button"><button  name={page} onClick={props.onClick} type="button">&gt;</button></div>; 
+        }
+        else {
+            return <div className="pager-button">&gt;</div>;
+        }
+    }
+
     if(props.isLastButton){
         if(props.currentPage === props.totalPages)
               return <div className="pager-button">&gt;&gt;</div>;

@@ -65,15 +65,19 @@ namespace Notes.Api
                 options.AddPolicy(AuthPolicies.ADMIN, policy => policy.Requirements.Add(new NotesAuthRequirement() { IsAdmin = true }));
             });
 
-            services.AddSingleton<IAuthorizationHandler, NotesAuthorizationHandler>();
+          
+
+            services.AddScoped<IAuthorizationHandler, NotesAuthorizationHandler>();
             services.Configure<IdpServiceConfiguration>(Configuration.GetSection("Auth0"));
-            services.AddSingleton<IDbProvider, SqlLiteDbProvider>((x)=>  new SqlLiteDbProvider(Configuration.GetConnectionString("NotesDbConnection")));
+            services.AddScoped<IDbProvider, SqlLiteDbProvider>((x)=>  new SqlLiteDbProvider(Configuration.GetConnectionString("NotesDbConnection")));
            
           
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IIdpService, IdpService>();
-            services.AddSingleton<IUserDao, UserDao>();
-            
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IIdpService, IdpService>();
+            services.AddScoped<INotesService, NotesService>();
+            services.AddScoped<IUserDao, UserDao>();
+            services.AddScoped<INotesDao, NotesDao>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

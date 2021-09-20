@@ -11,6 +11,6 @@ namespace Notes.Api.Model
     public class NoteInput
     {
         public string Note { get; set; }
-        public string UserIdentifier { get; set; }
+        public int Id { get; set; }
     }
 }

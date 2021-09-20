@@ -19,9 +19,7 @@ function App(props) {
     const getProfile = async ()=> {
       try{
         const prof = await getData("/users/extId",getAccessTokenSilently);
-        console.log(prof);
         setProfile(prof);
-        console.log(profile);
 
      }
      catch(e){
@@ -32,7 +30,6 @@ function App(props) {
 
     if(isAuthenticated && !profile){
       getProfile();
-      console.log(profile);
     }
 
   

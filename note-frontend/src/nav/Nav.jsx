@@ -10,6 +10,7 @@ import RegisterUser from '../account/RegisterUser';
 import Login from '../auth/Login';
 import Error from '../common/Error';
 import RegisterUserAdmin from '../account/RegisterUserAdmin';
+import NewNote from '../notes/NewNote';
 
 
 
@@ -96,6 +97,7 @@ const Nav = (props) => {
                 <Route exact path="/register" component={RegisterUser}/>
                 <Route exact path="/registeradmin" component={RegisterUserAdmin}/>
                 <Route exact path="/error" component={Error} />
+                <Route exact path="/createnote" component={NewNote} />
             </Switch>
 
 

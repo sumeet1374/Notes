@@ -39,7 +39,7 @@ const getData = async(url, getAccessTokenSilently) => {
 const postData = async(url, data, getAccessTokenSilently) => {
 
 
-    const urlFull = `${process.env.REACT_APP_API_BASE_URL}url`;
+    const urlFull = `${process.env.REACT_APP_API_BASE_URL}${url}`;
 
     if (getAccessTokenSilently) {
         const config = await getAccessTokenConfig(getAccessTokenSilently);

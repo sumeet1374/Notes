@@ -36,3 +36,8 @@ td {
     color: white;
     background-color: rgb(39, 8, 80);
 }
+
+.grid .buttontd {
+    width: 1%;
+    white-space: nowrap;
+}

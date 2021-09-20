@@ -28,8 +28,16 @@ namespace Notes.Api.Auth
             if (userName != null)
             {
                var user = service.GetUserByExternalId(userName).Result;
-                if (user != null && user.Active && user.IsAdmin == requirement.IsAdmin)
-                    context.Succeed(requirement);
+                if(requirement.IsAdmin)
+                {
+                    if (user != null && user.Active && user.IsAdmin == requirement.IsAdmin)
+                        context.Succeed(requirement);
+                }
+                else
+                {
+                    if (user != null && user.Active)
+                        context.Succeed(requirement);
+                }
             }
 
             return Task.CompletedTask;

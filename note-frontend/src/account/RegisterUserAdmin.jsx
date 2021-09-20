@@ -4,10 +4,25 @@ import '../common/Forms.css';
 import FormField from '../common/forms/FormField';
 import { required, email, minlength, validateFieldOnChange } from '../common/validation';
 import { passwordMatchValidation, confirmPasswordMatchValidation } from './RegistrationValidation';
+import { postData } from '../common/ajax';
 
 const RegisterUserAdmin = () => {
 
     const MIN_LENGTH = 8;
+
+    const createApiUser= ()=> {
+        const apiUser = { }
+        apiUser.firstName = user.firstName.value;
+        apiUser.lastName = user.lastName.value;
+        apiUser.email = user.email.value;
+        apiUser.password = user.password.value;
+        apiUser.confirmPassword = user.confirmPassword.value;
+        apiUser.active = true;
+        apiUser.isAdmin = user.isAdmin.value;
+
+        return apiUser;
+    };
+
     const SubmitUser = (event) => {
 
         event.preventDefault();
@@ -88,6 +103,10 @@ const RegisterUserAdmin = () => {
         }
 
     });
+
+    const [apiUser,setApiUser] = useState(null);
+    const [loading,setLoading] = useState(false);
+    
     return (
         <Card title="Register User" className="formStandard" >
             <div>

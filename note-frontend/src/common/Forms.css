@@ -22,6 +22,10 @@
     border-radius: 0.25rem;
 }
 
+.text-area {
+    height: 150px;
+}
+
 .form-field-checkbox {
     display: inline-block;
     margin-right: 1rem;
