@@ -2,10 +2,9 @@ import Card from '../common/Card';
 import Loader from '../common/Loader';
 import '../common/Forms.css';
 import './NoteList.css';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Grid from '../common/Grid';
-import { useEffect } from 'react/cjs/react.development';
 import { useAuth0 } from "@auth0/auth0-react";
 import { getData, postData }from '../common/ajax';
 const NoteList = () => {
