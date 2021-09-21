@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { maxLength, required, validateFieldOnChange } from "../common/validation";
 import { useHistory } from "react-router";
 import  Loader from '../common/Loader';
@@ -6,7 +6,6 @@ import  Card  from '../common/Card';
 import FormFieldTextArea from "../common/forms/FormsFieldTextArea";
 import { useAuth0 } from "@auth0/auth0-react";
 import { postData }from '../common/ajax';
-import { useEffect } from "react/cjs/react.development";
 const NewNote = () => {
     // Init Models
     const [loading, setLoading] = useState(false);
