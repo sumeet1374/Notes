@@ -70,7 +70,7 @@ const Grid = (props) => {
                     <PagerButton isFirsrtButton="true"  currentPage={currentPage} totalPages={totalPages}  onClick={pagerClicked}></PagerButton>
                     <PagerButton isPreviousSlotButton="true"  currentPage={currentPage} totalPages={totalPages} currentSlot={currentSlotNumber} lastSlot={totalSlots} onClick={pagerClicked}></PagerButton>
                     {/* <div className="pager-button">&lt;</div> */}
-                    { pagerArray.map((number,index)=><PagerButton number={number} currentPage={currentPage} totalPages={totalPages} key={index} onClick={pagerClicked}></PagerButton>)}
+                    { pagerArray.map((number,index)=><PagerButton key={index} number={number} currentPage={currentPage} totalPages={totalPages} key={index} onClick={pagerClicked}></PagerButton>)}
                     <PagerButton isNextSlotButton="true"  currentPage={currentPage} totalPages={totalPages} currentSlot={currentSlotNumber} lastSlot={totalSlots} onClick={pagerClicked}></PagerButton>
                     {/* <div className="pager-button">&gt;</div> */}
                     <PagerButton isLastButton="true"  currentPage={currentPage} totalPages={totalPages}  onClick={pagerClicked}></PagerButton>

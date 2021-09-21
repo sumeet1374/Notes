@@ -50,6 +50,7 @@ namespace Notes.Services.Implementation
             var response = await client.ExecuteAsync<AccessToken>(request);
             if(response.IsSuccessful)
             {
+                
                 return response.Data;
             }
 
@@ -77,7 +78,7 @@ namespace Notes.Services.Implementation
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IdpResponse> CreateUser(User user)
+        public async Task<string> CreateUser(User user)
         {
             var idpUser = CreateIdpUser(user);
             var token = await GetAccessTokenAsync();
@@ -95,7 +96,23 @@ namespace Notes.Services.Implementation
 
                 if (response.IsSuccessful)
                 {
-                    return response.Data;
+                    var id = response.Data.user_id;
+                    var client2 = new RestClient($"{configuration.UserServiceBaseUrl}api/v2/users/{id}/roles");
+                    client2.UseNewtonsoftJson(new Newtonsoft.Json.JsonSerializerSettings() { ContractResolver = new DefaultContractResolver() { NamingStrategy = new CamelCaseNamingStrategy() } });
+                    var rolePayLoad = new RoleModel() { Roles = new List<string> { configuration.DefaultRole } };
+                    var request2 = new RestRequest(Method.POST);
+                    request2.AddHeader("Authorization", $"Bearer {token.Access_token}");
+                    request2.AddJsonBody(rolePayLoad);
+                    var response2 = await client2.ExecuteAsync(request2);
+                    if(response2.IsSuccessful)
+                    {
+                        return id;
+                    }
+                    else
+                    {
+                        throw new IdpWebException(response2.StatusCode, response2.Content);
+                    }
+                  
                 }
 
                 throw new IdpWebException(response.StatusCode, response.Content);
@@ -103,7 +120,7 @@ namespace Notes.Services.Implementation
             else
             {
                 var valException = new ValidationException($"{user.Email} already registered.");
-                valException.MetaData = result;
+                valException.MetaData = result.user_id;
                 throw valException;
 
             }

@@ -21,6 +21,7 @@ namespace Notes.Services.Model
         public string ConfirmPassword { get; set; }
         public bool IsAdmin { get; set; }
         public bool Active { get; set; }
+        public bool IsAuthorized { get; set; } = true;
 
         public User()
         {

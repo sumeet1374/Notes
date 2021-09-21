@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Notes.Api.Auth;
 using Notes.Api.Model;
 using Notes.Services.Interfaces;
 using Notes.Services.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Notes.Api.Controllers
 {
+    /// <summary>
+    ///  Notes Managment REST API
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase

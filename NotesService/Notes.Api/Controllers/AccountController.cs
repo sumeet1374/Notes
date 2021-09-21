@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Notes.Api.Auth;
 using Notes.Services.Interfaces;
 using Notes.Services.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
 namespace Notes.Api.Controllers
 {
+    /// <summary>
+    ///  Account/user management REST Apis
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -32,17 +31,18 @@ namespace Notes.Api.Controllers
         }
         [HttpGet]
         [Route("/users/extId")]
-        [Authorize(policy: AuthPolicies.ADMIN)]
+        [Authorize(policy: AuthPolicies.USER)]
         public async Task<User> GetAuthenticatedUserByExternalUd()
         {
             var userId = User.Identity.Name;
             var user = await service.GetUserByExternalId(userId);
             return user;
+         
         }
 
         [HttpPost]
         [Route("/users")]
-        public async Task<ActionResult> CreateUaser(User user)
+        public async Task<ActionResult> CreateUser(User user)
         {
 
             await service.CreateUser(user);
@@ -50,7 +50,19 @@ namespace Notes.Api.Controllers
           
         }
 
-       
+
+        [HttpPost]
+        [Route("/adminusers")]
+        [Authorize(policy: AuthPolicies.ADMIN)]
+        public async Task<ActionResult> CreateUserByAdmin(User user)
+        {
+
+            await service.CreateUser(user);
+            return Ok();
+
+        }
+
+
 
         [HttpGet]
         [Route("/users")]

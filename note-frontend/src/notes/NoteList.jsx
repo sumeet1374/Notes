@@ -7,7 +7,10 @@ import { useHistory } from 'react-router';
 import Grid from '../common/Grid';
 import { useAuth0 } from "@auth0/auth0-react";
 import { getData, postData }from '../common/ajax';
-const NoteList = () => {
+const NoteList = (props) => {
+
+
+    
 
     const [pageNumber, setPageNumber] = useState(1);
     const [loading,setLoading] = useState(false);
@@ -23,6 +26,10 @@ const NoteList = () => {
 
     const getDeleteButton = (row, field) => {
         return <button className="button primary" name={row[field]} onClick={onDeleteClick} >Delete</button>
+    }
+
+    const getFormattedDate = (row,field) => {
+        return new Date(row[field]).toLocaleString('en-GB');
     }
 
     const onPagerClicked = (event)=> {
@@ -42,7 +49,7 @@ const NoteList = () => {
     }
     const gridMetaData = [
         { title: "Note", field: "note", valueFn: getValue , isActionField:false },
-        { title: "Created Date", field: "createdDate", valueFn: getValue , isActionField:false },
+        { title: "Created Date", field: "createdDate", valueFn: getFormattedDate , isActionField:false },
 
         { title: " ", field: "id", valueFn: getDeleteButton , isActionField:true }
     ];
@@ -60,8 +67,12 @@ const NoteList = () => {
               setLoading(false);
             }
             catch (err) {
-              console.log(err);
-              setLoading(false);
+               console.log(err);
+               history.push("/error");
+              
+            }
+            finally {
+                setLoading(false);
             }
         };
 
@@ -74,6 +85,7 @@ const NoteList = () => {
               catch (err) {
               
                 console.log(err);
+                history.push("/error");
                
               }
               finally {
@@ -82,14 +94,21 @@ const NoteList = () => {
                setLoading(false);
               }
         };
-
-        if(deleteNote){
-            deleteNoteFn();
-        }
        
-        getNotes();
+            if(deleteNote){
+                deleteNoteFn();
+            }
+           
+            getNotes();
+        
+      
+     
 
     },[pageNumber,deleteNote]);
+
+    if(props.isAuthorized)
+        history.push("/error");
+
 
     return (
         <>

@@ -12,7 +12,7 @@ ReactDOM.render(
        clientId={process.env.REACT_APP_AUTH0_CLIENTID}
        redirectUri={window.location.origin}
        audience={process.env.REACT_APP_API_AUDIENCE}
-       scope="open idread:notes"
+       scope="read:notes"
     >
     <App domain={process.env.REACT_APP_AUTH0_DOMAIN} />
     </Auth0Provider>

@@ -25,9 +25,7 @@ const UserList = () => {
     { title: "Id", field: "id", valueFn: getValue },
     { title: "First Name", field: "firstName", valueFn: getValue },
     { title: "Last Name", field: "lastName", valueFn: getValue },
-    { title: "Email", field: "email", valueFn: getValue },
-    { title: "External Id", field: "externalUserId", valueFn: getValue },
-    { title: " ", field: "id", valueFn: getValueDeactivate }
+    { title: "Email", field: "email", valueFn: getValue }
   ]
 
   const { getAccessTokenSilently } = useAuth0();
@@ -37,7 +35,6 @@ const UserList = () => {
   const onPagerClicked = (event)=> {
 
     setPageNumber(event.target.name);
-   // console.log(event.target.name);
   }
 
   useEffect(() => {

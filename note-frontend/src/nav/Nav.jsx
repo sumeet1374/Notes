@@ -64,10 +64,10 @@ const Nav = (props) => {
                 </div>
                 <ul className={navListClasses.listClasses} >
                     <li className="list-item">
-                       { props.isAuthenticated && props.profile? <Link to="/">My Notes</Link> :null }
+                       { props.isAuthenticated && props.isAuthorized? <Link to="/">My Notes</Link> :null }
                     </li>
                     <li className="list-item">
-                      { props.isAuthenticated && props.profile && props.profile.isAdmin? <Link to="/users">Users</Link> :null }
+                      { props.isAuthenticated && props.isAuthorized && props.profile.isAdmin? <Link to="/users">Users</Link> :null }
                     </li>
                     <li className="list-item submenu-list-item">
                         <a href="#" className="submenu-button" onClick={subMenuButtonClick}> {props.profile?props.profile.email:"Profile"} &#9660;</a>
@@ -91,13 +91,13 @@ const Nav = (props) => {
             </nav>
 
             <Switch>
-            { props.isAuthenticated ?  <Route exact path="/" component={NoteList} /> : <Route  exact path="/" component={Login}></Route> }
-                <Route exact path="/users" component={UserList} domain={props.domain} />
+            { props.isAuthenticated ?  <Route exact path="/" component={NoteList} isAuthorized={props.isAuthorized}/> : <Route  exact path="/" component={Login}></Route> }
+                <Route exact path="/users" component={UserList} domain={props.domain} isAuthorized={props.isAuthorized} />
                 <Route exact path="/logout" component={LogOut}/>
                 <Route exact path="/register" component={RegisterUser}/>
-                <Route exact path="/registeradmin" component={RegisterUserAdmin}/>
+                <Route exact path="/registeradmin" component={RegisterUserAdmin} isAuthorized={props.isAuthorized}/>
                 <Route exact path="/error" component={Error} />
-                <Route exact path="/createnote" component={NewNote} />
+                <Route exact path="/createnote" component={NewNote} isAuthorized={props.isAuthorized}/>
             </Switch>
 
 

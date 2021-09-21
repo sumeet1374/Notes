@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { useHistory } from 'react-router';
 import Card from '../common/Card';
 import '../common/Forms.css';
 import FormField from '../common/forms/FormField';
 import { required, email, minlength, validateFieldOnChange } from '../common/validation';
 import { passwordMatchValidation, confirmPasswordMatchValidation } from './RegistrationValidation';
 import { postData } from '../common/ajax';
+import Loader from  '../common/Loader';
+import { useAuth0 } from "@auth0/auth0-react";
+import FormFieldCheckBox from '../common/forms/FormFieldCheckBox';
 
 const RegisterUserAdmin = () => {
 
@@ -28,12 +32,19 @@ const RegisterUserAdmin = () => {
         event.preventDefault();
         if (validateForm()) {
             console.log(user);
+            var apiUser = createApiUser();
+           
+            setApiUser(apiUser);
         }
         else {
             console.log("Error");
         }
 
-    }
+    };
+
+    const onCancel = (event)=>{
+        history.push("/");
+    };
     // Function to validate entire form
     const validateForm = () => {
         let isValid = true;
@@ -60,7 +71,13 @@ const RegisterUserAdmin = () => {
     // Change Event
     const handleChange = (event) => {
         const key = event.target.name;
-        const value = event.target.value;
+        let value;
+        if(event.target.type === "checkbox"){
+            value = event.target.checked;
+        }else{
+            value = event.target.value;
+        }
+     
         let updatedUser = { ...user };
         // Validation is done based upon validation functions mentioned for each field
         validateField(key, value, user, updatedUser);
@@ -106,8 +123,38 @@ const RegisterUserAdmin = () => {
 
     const [apiUser,setApiUser] = useState(null);
     const [loading,setLoading] = useState(false);
+    let history = useHistory();
+    const { getAccessTokenSilently } = useAuth0();
+
+    useEffect(() => {
+        // Only execute when we create a user.
+        const saveUser = async () => {
+            try {
+
+                const url = "/adminusers";
+                setLoading(true);
+                 await postData(url, apiUser,getAccessTokenSilently);
+                setLoading(false);
+                history.push("/");
+
+            }
+            catch (e) {
+                setLoading(false);
+                history.push("/error")
+            }
+
+        };
+        if (apiUser) {
+
+            saveUser();
+
+        }
+    }, [apiUser]);
+   
     
     return (
+        <>
+        <Loader visible={loading} ></Loader>
         <Card title="Register User" className="formStandard" >
             <div>
                 <form className="form-main" onSubmit={SubmitUser}>
@@ -116,15 +163,16 @@ const RegisterUserAdmin = () => {
                     <FormField name="lastName" type="text" value={user.lastName.value} onChange={handleChange} label="Last Name" />
                     <FormField name="password" type="password" value={user.password.value} onChange={handleChange} isRequired="true" label="Password" validationResult={user.password.validationResult} />
                     <FormField name="confirmPassword" type="password" value={user.confirmPassword.value} onChange={handleChange} isRequired="true" label="Confirm Password" validationResult={user.confirmPassword.validationResult} />
-                    <FormField name="isAdmin" type="checkbox" value={user.isAdmin.value} onChange={handleChange} label="Is Admin" />
+                    <FormFieldCheckBox name="isAdmin"  value={user.isAdmin.value} onChange={handleChange} label="Is Admin" />
 
                     <div className="form-field-group">
                         <button className="button primary" type="submit" >Register</button>
-                        <button className="button secondary" type="button">Cancel</button>
+                        <button className="button secondary" type="button" onClick={onCancel}>Cancel</button>
                     </div>
                 </form>
             </div>
         </Card>
+        </>
     );
 
 }

@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 
 const getAccessTokenConfig = async(getAccessTokenSilently) => {
@@ -45,7 +44,7 @@ const postData = async(url, data, getAccessTokenSilently) => {
         const config = await getAccessTokenConfig(getAccessTokenSilently);
         const result = await axios.post(urlFull, data, config);
     } else {
-        const result = await axios.post(url, data);
+        const result = await axios.post(urlFull, data);
     }
 
 }

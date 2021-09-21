@@ -4,13 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { getData } from './common/ajax';
 
-
-
-
 function App(props) {
   
-  const { isLoading, error,isAuthenticated ,loginWithRedirect } = useAuth0();
+  const { isAuthenticated  } = useAuth0();
   const [ profile,setProfile] = useState(null);
+
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -19,12 +17,12 @@ function App(props) {
     const getProfile = async ()=> {
       try{
         const prof = await getData("/users/extId",getAccessTokenSilently);
-        setProfile(prof);
-
+        if(prof)
+          setProfile(prof);
+        
      }
      catch(e){
-       console.log(e)
-     // history.push('/error');
+       console.log(e);
      }
     }
 
@@ -36,7 +34,7 @@ function App(props) {
   },[isAuthenticated,profile]);
   return (
     <div >
-      <Nav isAuthenticated={isAuthenticated} domain={props.domain} profile={profile}/>
+      <Nav isAuthenticated={isAuthenticated} domain={props.domain} profile={profile} isAuthorized={profile?true:false}/>
     </div>
 
 

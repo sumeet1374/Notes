@@ -61,7 +61,11 @@ const NewNote = () => {
         else{
             console.log("Error");
         }
-    }
+    };
+
+    const onCancel = (event)=>{
+        history.push("/");
+    };
 
     useEffect(()=> {
         const saveNote = async ()=> {
@@ -84,8 +88,11 @@ const NewNote = () => {
         }
         catch(e){
             console.log(e);
-            setLoading(false);
+         
             history.push("/error");
+        }
+        finally{
+            setLoading(false);
         }
 
     },[apiNote]);
@@ -97,7 +104,7 @@ const NewNote = () => {
                     <FormFieldTextArea name="note" value={note.note.value} isRequired="true" label="Notes" validationResult={note.note.validationResult} onChange={handleChange}></FormFieldTextArea>
                     <div className="form-field-group">
                         <button className="button primary" type="submit" >Create</button>
-                        <button className="button secondary" type="button">Cancel</button>
+                        <button className="button secondary" type="button" onClick={onCancel}>Cancel</button>
                     </div>
                 </form>
             </div>

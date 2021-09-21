@@ -79,7 +79,7 @@ namespace Notes.Services.Implementation
         public async Task<int> CreateUser(User user)
         {
             ValidationException except = null;
-            IdpResponse idpResponse = null;
+            string idpResponse = null;
             ValidateUserCreationInput(user); // Basic validation
             try
             {
@@ -97,7 +97,7 @@ namespace Notes.Services.Implementation
             catch(ValidationException ex)
             {
                 except = ex;
-                idpResponse = ex.MetaData as IdpResponse;
+                idpResponse = ex.MetaData as string;
             }
             catch (Exception)
             {
@@ -119,7 +119,7 @@ namespace Notes.Services.Implementation
                 {
                     // Update User
                     var userToUpdate = CreateOrUpdateDbUser(user, existingUser);
-                    userToUpdate.ExternalUserId = idpResponse.user_id;
+                    userToUpdate.ExternalUserId = idpResponse;
                     context.SaveChanges();
                     result = existingUser.Id;
 
@@ -127,8 +127,8 @@ namespace Notes.Services.Implementation
                 else
                 {
                     var userToCreate = CreateOrUpdateDbUser(user);
-                    userToCreate.ExternalUserId = idpResponse.user_id;
-                    result = await userDao.Create(CreateOrUpdateDbUser(user));
+                    userToCreate.ExternalUserId = idpResponse;
+                    result = await userDao.Create(userToCreate);
                 }
             }
 

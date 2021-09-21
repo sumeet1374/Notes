@@ -4,8 +4,6 @@ import '../common/Forms.css';
 import FormField from '../common/forms/FormField';
 import { required, email, minlength, validateFieldOnChange } from '../common/validation';
 import { passwordMatchValidation, confirmPasswordMatchValidation } from './RegistrationValidation';
-
-import { useAuth0 } from "@auth0/auth0-react";
 import { postData } from '../common/ajax';
 import { useHistory } from 'react-router';
 import Loader from '../common/Loader';
@@ -26,12 +24,11 @@ const RegisterUser = () => {
         apiUser.isAdmin = false;
 
         return apiUser;
-    }
+    };
     const SubmitUser = (event) => {
 
         event.preventDefault();
         if (validateForm()) {
-            console.log(user);
             var newUser = createApiUser();
             setApiUser(newUser);
         }
@@ -39,6 +36,10 @@ const RegisterUser = () => {
             console.log("Error");
         }
 
+    }
+
+    const onCancel = (event)=>{
+        history.push("/");
     }
     // Function to validate entire form
     const validateForm = () => {
@@ -74,7 +75,6 @@ const RegisterUser = () => {
 
     }
     // Initial Model
-    const { getAccessTokenSilently } = useAuth0();
     const [apiUser, setApiUser] = useState(null);
     const [loading, setLoading] = useState(false);
     let history = useHistory();
@@ -116,7 +116,7 @@ const RegisterUser = () => {
 
                 const url = "/users";
                 setLoading(true);
-                const response = await postData(url, apiUser);
+                 await postData(url, apiUser);
                 setLoading(false);
                 history.push("/");
 
@@ -135,7 +135,7 @@ const RegisterUser = () => {
     }, [apiUser]);
     return (
         <>
-            <Loader></Loader>
+            <Loader visible={loading}></Loader>
             <Card title="Register User" className="formStandard" >
                 <div>
                     <form className="form-main" onSubmit={SubmitUser}>
@@ -144,11 +144,9 @@ const RegisterUser = () => {
                         <FormField name="lastName" type="text" value={user.lastName.value} onChange={handleChange} label="Last Name" />
                         <FormField name="password" type="password" value={user.password.value} onChange={handleChange} isRequired="true" label="Password" validationResult={user.password.validationResult} />
                         <FormField name="confirmPassword" type="password" value={user.confirmPassword.value} onChange={handleChange} isRequired="true" label="Confirm Password" validationResult={user.confirmPassword.validationResult} />
-                        {/* <FormField name="isAdmin" type="checkbox" value={user.isAdmin.value} onChange={handleChange} label="Is Admin" /> */}
-
                         <div className="form-field-group">
                             <button className="button primary" type="submit" >Register</button>
-                            <button className="button secondary" type="button">Cancel</button>
+                            <button className="button secondary" type="button" onClick={onCancel}>Cancel</button>
                         </div>
                     </form>
                 </div>

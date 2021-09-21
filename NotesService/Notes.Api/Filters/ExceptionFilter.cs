@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Notes.Services.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Notes.Api.Filters
 {
+    /// <summary>
+    ///  Filter /Hook to handle REST api exception
+    /// </summary>
     public class ExceptionFilter: IActionFilter, IOrderedFilter
     {
 
